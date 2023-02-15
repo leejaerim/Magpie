@@ -3,7 +3,7 @@ import Table from "./Table";
 
 const HomeTab = ({table_price})=>{
     return(
-        <Tabs>
+        <Tabs  isFitted variant='enclosed' variant='soft-rounded' colorScheme='blue'>
             <TabList>
                 <Tab>1</Tab>
                 <Tab>2</Tab>
@@ -12,8 +12,8 @@ const HomeTab = ({table_price})=>{
             </TabList>
             <TabPanels>
                 {[1,2,3,4].map((index)=>(
-                    <TabPanel>
-                        <Table key={index} table_price={table_price}></Table>
+                    <TabPanel key={index}>
+                        <Table  table_price={table_price}></Table>
                     </TabPanel>
                 ))}
             </TabPanels>

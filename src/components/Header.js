@@ -1,12 +1,15 @@
 
 import {FaReact} from "react-icons/fa";
-import {HStack, Text, Stack} from "@chakra-ui/react";
+import {HStack,VStack, Text, Stack} from "@chakra-ui/react";
 import React from "react";
 export default function Header({table_sum}) {
+    const date = new Date()
+    const daydict = {0:'일',1:'월',2:'화',3:'수',4:'목',5:'금',6:'토'}
+    const dateText = `${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDate()}일 ${daydict[date.getDay()]}요일`
     return(
         <Stack
             justifyContent={"space-between"}
-            px={"40"}
+            px={"30"}
             py={"10"}
             borderBottomWidth={1}
             alignItems="center"
@@ -19,13 +22,16 @@ export default function Header({table_sum}) {
                 md: 0,
             }}
         >
-            <HStack fontSize={50} fontWeight={'bold'}>\
+            <VStack fontSize={30} fontWeight={'bold'}>
+                <HStack>
                 <FaReact size={"38"} style={{paddingRight:10}}/>
                 <Text _hover={{ cursor:'pointer' }}>
-                    FED
+                    MagpieTown
                 </Text>
+                </HStack>
+                <Text>{dateText}</Text>
                 <Text> 테이블 합계 : {table_sum}</Text>
-            </HStack>
+            </VStack>
         </Stack>
     )
 }

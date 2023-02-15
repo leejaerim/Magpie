@@ -12,3 +12,9 @@
   - `npm install react-router-dom`
 - react icons
   - `npm install react-icons --save`
+- firebase
+  - `npm install -g firebase-tools`
+  - 빌드 : `npm run build`
+  - 배포 : `firebase deploy`
+
+

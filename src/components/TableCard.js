@@ -1,29 +1,29 @@
-import {Text, Box, Button, Heading, HStack} from "@chakra-ui/react";
+import {Input, Box, Button, Heading, HStack} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 
-const TableCard = ({menu_name,menu_price, sum, sub, init})=>{
-
-    const [count, SetCount] = useState(init);
+const TableCard = ({index, menu_name,menu_price, sum, sub, count, countPlus, countMinus})=>{
     const price = menu_price;
     const UpCount =(e)=>{
         sum(price)
-        SetCount(prev => prev+1)
+        countPlus(index)
     }
     const DownCount =(e)=>{
         if(count > 0 ){
             sub(price)
-            SetCount(prev => prev-1)
+            countMinus(index)
         }
     }
     //메뉴 이름, 수량, +, -
     return(
-        <HStack>
+        <Box>
             <Heading>{menu_name}</Heading>
-            <Text>{menu_price * count}</Text>
-            <Button color={'black'}>{count}</Button>
-            <Button colorScheme='red' onClick={UpCount}>+</Button>
-            <Button colorScheme='blue' onClick={DownCount}>-</Button>
-        </HStack>
+            <HStack>
+                <Input w={'50%'} value={menu_price*count}/>
+                <Button color={'black'}>{count}</Button>
+                <Button colorScheme='red' onClick={UpCount}>+</Button>
+                <Button colorScheme='blue' onClick={DownCount}>-</Button>
+            </HStack>
+        </Box>
     )
 }
 export default TableCard;
