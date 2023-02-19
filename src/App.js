@@ -2,6 +2,7 @@ import Table from "./components/Table";
 import Header from "./components/Header";
 import HomeTab from "./components/HomeTab";
 import {useState} from "react";
+import {Outlet} from "react-router-dom";
 
 function App() {
     const [sum , setSum] = useState(0)
@@ -11,7 +12,7 @@ function App() {
   return (
     <div className="App">
         <Header table_sum={sum}></Header>
-        <HomeTab table_price={table_price}></HomeTab>
+        <Outlet table_price={table_price}></Outlet>
     </div>
   );
 }
