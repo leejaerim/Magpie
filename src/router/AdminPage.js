@@ -3,6 +3,7 @@ import NumberInput from "../components/NumberInput";
 import {useEffect, useState} from "react";
 import {addDoc, collection, onSnapshot, query, orderBy, limit} from "firebase/firestore";
 import {dbService} from "../fbase";
+import MenuFactory from "../components/MenuFactory";
 const AdminPage =()=>{
     const [tableCount, setTableCount] = useState(0);
     const [menu, setMenu] = useState([]);
@@ -46,6 +47,8 @@ const AdminPage =()=>{
                 <Button colorScheme={"twitter"} onClick={onSave}>저장</Button>
             </HStack>
             <Divider pb={"10px;"}></Divider>
+            <MenuFactory></MenuFactory>
+            <Divider pb={"10px;"}></Divider>
             <Grid
                 mt={10}
                 px={{base: 10, lg: 10}}
@@ -58,8 +61,12 @@ const AdminPage =()=>{
                     xl: "repeat(6, 1fr)",
                 }}
             >
-                {menu.length && menu.map(menu=>(
-                    menu.name
+                {menu.length && menu.map((menu,index)=>(
+                    <Text key={index}>
+                        {menu.menuName}
+                    ,{menu.menuPrice}
+
+                    </Text>
                 ))}
             </Grid>
         </Box>
