@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="App">
         <Header table_sum={sum}></Header>
-        <Outlet table_price={table_price}></Outlet>
+        <Outlet context={[table_price]}/>
     </div>
   );
 }

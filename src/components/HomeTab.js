@@ -1,7 +1,9 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import Table from "./Table";
+import {useOutletContext} from "react-router-dom";
 
-const HomeTab = ({table_price})=>{
+const HomeTab = ()=>{
+    const [table_price] = useOutletContext();
     return(
         <Tabs  isFitted variant='enclosed' variant='soft-rounded' colorScheme='blue'>
             <TabList>
