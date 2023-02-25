@@ -28,7 +28,7 @@ const HomeTab = ()=>{
             <TabPanels>
                 {[ ...Array(tableCount).keys()].map( i =>(
                     <TabPanel key={i}>
-                        <Table index={i} table_price={table_price}></Table>
+                        <Table table_index={i} table_price={table_price}></Table>
                     </TabPanel>
                 ))}
             </TabPanels>

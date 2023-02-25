@@ -1,4 +1,4 @@
-import {Input,Text,  Box, Button, Heading, HStack} from "@chakra-ui/react";
+import {Input, Box, Button, Heading, HStack} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 
 const TableCard = ({index, menu_name,menu_price, sum, sub, count, countPlus, countMinus})=>{
@@ -18,7 +18,7 @@ const TableCard = ({index, menu_name,menu_price, sum, sub, count, countPlus, cou
         <Box>
             <Heading>{menu_name}</Heading>
             <HStack>
-                <Text fontSize={'20px;'}  w={'50%'}>{menu_price*count}</Text>
+                <Input w={'50%'} value={menu_price*count}/>
                 <Button color={'black'}>{count}</Button>
                 <Button colorScheme='red' onClick={UpCount}>+</Button>
                 <Button colorScheme='blue' onClick={DownCount}>-</Button>
