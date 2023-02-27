@@ -9,6 +9,15 @@ const Table =({table_index, table_price})=> {
     const [count, setCount] = useState([]);
     const [ref , setRef] = useState(null);
     const [totalPrice , setTotalPrice] = useState(0);
+    useEffect(()=>{
+        if(menus.length && count.length){
+            let table_sum = 0
+            menus.map((menu,index)=>{
+                table_sum += menu.menuPrice * count[index]
+            })
+            setTotalPrice(table_sum)
+        }
+    },[count,menus])
     useEffect(() => {
         //getNweets();
         onSnapshot(collection(dbService, "menu"), obj => {
@@ -17,12 +26,7 @@ const Table =({table_index, table_price})=> {
                 ...doc.data(),
             })));
             setCount(prev=>[ ...Array(obj.docs.length).keys() ].map( i => 0))
-            onSnapshotCount()
         })
-
-    }, []);
-
-    const onSnapshotCount =()=>{
         onSnapshot(query(collection(dbService, "count"), where("index", "==", table_index)), async obj => {
             if(obj.docs.length == 0){
                 if(count.length != 0){
@@ -41,7 +45,7 @@ const Table =({table_index, table_price})=> {
                 setRef(doc(dbService, "count", `${obj.docs[0].id}`));
             }
         })
-    }
+    }, []);
 
     const SumPrice =(price)=>{
         setTotalPrice(prev => prev + price)
@@ -72,6 +76,7 @@ const Table =({table_index, table_price})=> {
             await updateDoc(ref, { count: count });
         }
     }
+
     return (
         <Box>
             {menus.map((menu, i)=>(
