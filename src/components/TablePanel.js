@@ -28,8 +28,8 @@ const TablePanel = _ =>{
                 <Grid templateColumns="repeat(2, 1fr)" gap={6}>
                     {[...Array(tableCount).keys()].map((i) => (
                             <Button
-                                key={i+1}
-                                index={i+1}
+                                key={i}
+                                index={i}
                                 colorScheme="twitter"
                                 height="80px"
                                 onClick={(e)=>{setIndex(prev=>parseInt(e.target.getAttribute('index')))}}

@@ -83,8 +83,8 @@ const Table =({index, setIndex, table_index,table_price})=> {
                 <TableCard key={i} index={i} sum={SumPrice} sub={SubPrice} menu_name={menu.menuName} menu_price={parseInt(menu.menuPrice)} countPlus={countPlus} count={count[i]} countMinus={countMinus}></TableCard>
             ))}
             <Divider mt={5} mb={5} orientation='horizontal' />
-            <Button colorScheme='red' onClick={payment}>정산</Button>
-            <Button colorScheme='twitter' onClick={setIndex}>테이블</Button>
+            <Button w={'30%'} size={'lg'} colorScheme='twitter' onClick={setIndex}>테이블</Button>
+            <Button w={'30%'} ml={5} colorScheme='red' size={'lg'} onClick={payment}>정산</Button>
             <Text fontWeight={'bold'} fontSize={'30px;'} mt={'10px;'}>합계 : {totalPrice}</Text>
         </Box>
     )
