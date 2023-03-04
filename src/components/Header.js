@@ -6,7 +6,7 @@ import AuthForm from "./AuthForm";
 export default function Header({table_sum}) {
     const date = new Date()
     const daydict = {0:'일',1:'월',2:'화',3:'수',4:'목',5:'금',6:'토'}
-    const dateText = `${date.getFullYear()}년 ${date.getMonth()}월 ${date.getDate()}일 ${daydict[date.getDay()]}요일`
+    const dateText = `${date.getFullYear()}년 ${date.getMonth()+1}월 ${date.getDate()}일 ${daydict[date.getDay()]}요일`
     return(
         <Box>
 

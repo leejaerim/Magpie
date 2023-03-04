@@ -4,6 +4,8 @@ import React from "react";
 import HomeTab from "./components/HomeTab";
 import NotFound from "./router/NotFound";
 import AdminPage from "./router/AdminPage";
+import TablePanel from "./components/TablePanel";
+import Table from "./components/Table";
 
 const router = createBrowserRouter([
     {
@@ -13,12 +15,12 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <HomeTab></HomeTab>,
+                element: <TablePanel></TablePanel>,
             },
             {
                 path: "admin/",
                 element: <AdminPage></AdminPage>,
-            }
+            },
         ],
     },
 ]);

@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {collection, onSnapshot, query, doc, where, addDoc, updateDoc} from "firebase/firestore";
 import {dbService} from "../fbase";
 
-const Table =({table_index, table_price})=> {
+const Table =({index, setIndex, table_index,table_price})=> {
     const [menus, setMenus] = useState([]);
     const [count, setCount] = useState([]);
     const [ref , setRef] = useState(null);
@@ -78,12 +78,13 @@ const Table =({table_index, table_price})=> {
     }
 
     return (
-        <Box>
+        <Box className={index === table_index ? 'active':'none'}>
             {menus.map((menu, i)=>(
                 <TableCard key={i} index={i} sum={SumPrice} sub={SubPrice} menu_name={menu.menuName} menu_price={parseInt(menu.menuPrice)} countPlus={countPlus} count={count[i]} countMinus={countMinus}></TableCard>
             ))}
             <Divider mt={5} mb={5} orientation='horizontal' />
             <Button colorScheme='red' onClick={payment}>정산</Button>
+            <Button colorScheme='twitter' onClick={setIndex}>테이블</Button>
             <Text fontWeight={'bold'} fontSize={'30px;'} mt={'10px;'}>합계 : {totalPrice}</Text>
         </Box>
     )
