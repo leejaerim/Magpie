@@ -1,8 +1,8 @@
 
 import {FaReact} from "react-icons/fa";
-import {Box, HStack,VStack, Text, Stack} from "@chakra-ui/react";
+import {Box, HStack, VStack, Text, Stack, Button} from "@chakra-ui/react";
 import React from "react";
-import AuthForm from "./AuthForm";
+import {Link} from "react-router-dom";
 export default function Header({table_sum}) {
     const date = new Date()
     const daydict = {0:'일',1:'월',2:'화',3:'수',4:'목',5:'금',6:'토'}
@@ -35,6 +35,9 @@ export default function Header({table_sum}) {
                 <Text>{dateText}</Text>
                 <Text> 테이블 합계 : {table_sum}</Text>
             </VStack>
+            <Link to={'payment'}>
+                <Button colorScheme={'twitter'}>결제</Button>
+            </Link>
         </Stack>
         {/*<AuthForm></AuthForm>*/}
         </Box>

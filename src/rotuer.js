@@ -6,6 +6,7 @@ import NotFound from "./router/NotFound";
 import AdminPage from "./router/AdminPage";
 import TablePanel from "./components/TablePanel";
 import Table from "./components/Table";
+import Payment from "./router/Payment";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             {
                 path: "admin/",
                 element: <AdminPage></AdminPage>,
+            },
+            {
+                path: "payment/",
+                element: <Payment></Payment>,
             },
         ],
     },
