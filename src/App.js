@@ -8,28 +8,31 @@ import {dbService} from "./fbase";
 
 function App() {
     const [sum , setSum] = useState(0)
-    const [ref , setRef] = useState(null);
-    const dateTime = new Date()
-    onSnapshot(query(collection(dbService, "payment"), where("date", "==", `${dateTime.getFullYear()}-${dateTime.getMonth()}-${dateTime.getDate()}`)), async obj => {
-        if(obj.docs.length == 0){
-            const table_result = {
-                value: 0,
-                date: `${dateTime.getFullYear()}-${dateTime.getMonth()}-${dateTime.getDate()}`,
-            }
-            try {
-                const docRef = await addDoc(collection(dbService, "payment"), table_result)
-            } catch (e) {
-            }
+    let dateTime = new Date();
+    dateTime.setHours(dateTime.getHours() + 9);
+    dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
+    onSnapshot(query(collection(dbService, "payment"), where("date", ">=", dateTime.split(' ')[0])), async obj => {
+        if(obj.docs.length != 0){
+            let temp = 0
+            obj.docs.map(data=>{ temp += data.data().value;})
+            setSum(temp)
         }else{
-            setSum(prev=>obj.docs[0].data().value)
-            setRef(doc(dbService, "payment", `${obj.docs[0].id}`));
+            setSum(prev=>0)
         }
     })
-    const table_price= (table_value)=>{
-        if(ref != null){
-            updateDoc(ref, { value: sum+table_value});
+    const table_price= async (table_value)=>{
+        const table_result = {
+            value: table_value,
+            date: dateTime,
         }
-        setSum(prev => prev+table_value);
+        try {
+            const docRef = await addDoc(collection(dbService, "payment"), table_result)
+        } catch (e) {
+        }
+        // if(ref != null){
+        //     updateDoc(ref, { value: sum+table_value});
+        // }
+        // setSum(prev => prev+table_value);
     }
   return (
     <div className="App">
