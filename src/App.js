@@ -1,7 +1,7 @@
 import Table from "./components/Table";
 import Header from "./components/Header";
 import HomeTab from "./components/HomeTab";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Outlet} from "react-router-dom";
 import {addDoc, collection, doc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
 import {dbService} from "./fbase";
@@ -11,15 +11,18 @@ function App() {
     let dateTime = new Date();
     dateTime.setHours(dateTime.getHours() + 9);
     dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
-    onSnapshot(query(collection(dbService, "payment"), where("date", ">=", dateTime.split(' ')[0])), async obj => {
-        if(obj.docs.length != 0){
-            let temp = 0
-            obj.docs.map(data=>{ temp += data.data().value;})
-            setSum(temp)
-        }else{
-            setSum(prev=>0)
-        }
-    })
+    useEffect(()=>{
+        onSnapshot(query(collection(dbService, "payment"), where("date", ">=", dateTime.split(' ')[0])), async obj => {
+            if(obj.docs.length != 0){
+                let temp = 0
+                obj.docs.map(data=>{ temp += data.data().value;})
+                setSum(temp)
+            }else{
+                setSum(prev=>0)
+            }
+        })
+    },[])
+
     const table_price= async (table_value)=>{
         const table_result = {
             value: table_value,
