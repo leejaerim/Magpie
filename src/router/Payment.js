@@ -31,6 +31,10 @@ const Payment =()=>{
     const [dataMap, setDataMap] = useState([])
     const [paymentRef, setPaymentRef] = useState(null)
     const [value, setValue] = useState(0)
+    let dateTime = new Date();
+    dateTime.setHours(dateTime.getHours() + 9);
+    dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
+    const [date, setDate] = useState(dateTime.split(' ')[0])
     const onSubmit = async (e) => {
         e.preventDefault();
         await updateDoc(paymentRef, { value: parseInt(value)});
@@ -50,21 +54,31 @@ const Payment =()=>{
         onClose();
     }
     let sumPrice = 0;
-    let dateTime = new Date();
-    dateTime.setHours(dateTime.getHours() + 9);
-    dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
+
     useEffect(() => {
-        onSnapshot(query(collection(dbService, "payment"), where("date", ">=", dateTime.split(' ')[0])), async obj => {
-            if(obj.docs.length != 0){
-                setDataMap(prev => obj.docs)
-            }else{
-                setDataMap([])
-            }
-        })
-    },[])
+        if(date != null){
+            onSnapshot(query(collection(dbService, "payment"), where("date", ">=", date)), async obj => {
+                if(obj.docs.length != 0){
+                    setDataMap(prev => obj.docs)
+                }else{
+                    setDataMap([])
+                }
+            })
+        }
+    },[date,])
 
     return(
         <Box>
+            <input value={date} style={{paddingLeft : '100px;'}} type="date" onChange={(e)=>{
+                const {
+                    target: { value },
+                } = e;
+                setDate(prev => value)
+            }}/>
+            <Button colorScheme={"twitter"} ml={"5"} onClick={(e)=>{
+                e.preventDefault();
+                setDate(dateTime.split(' ')[0]);
+            }}>Today</Button>
             <TableContainer>
                 <Table variant='simple'>
                     <TableCaption>{dateTime.split(' ')[0]} 매출 내역</TableCaption>
@@ -75,12 +89,15 @@ const Payment =()=>{
                             ))}
                         </Tr>
                     </Thead>
-
                         {dataMap.length != 0 && dataMap.map(datamap=>{
                             sumPrice += datamap.data().value
                             return(
                                 <Tbody>
-                                <Tr onClick={(e)=>{setPaymentRef(prev=>doc(dbService, "payment", e.target.dataset.id));onOpen();}}>
+                                <Tr onClick={(e)=>{
+                                        setPaymentRef(prev=>doc(dbService, "payment", e.target.dataset.id));
+                                        setValue(datamap.data().value)
+                                        onOpen();
+                                }}>
                                     <Td data-id={datamap.id}>{datamap.data().date}</Td>
                                     <Td data-id={datamap.id}>{datamap.data().value}</Td>
                                 </Tr>
