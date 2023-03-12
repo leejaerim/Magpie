@@ -35,11 +35,18 @@ export default function Header({table_sum}) {
                 <Text>{dateText}</Text>
                 <Text> 테이블 합계 : {table_sum}</Text>
             </VStack>
+            <HStack>
+            {paymentPage && <Link to={'admin'} onClick={()=>{
+                setPaymentPage(prev=>!prev)
+            }}>
+                <Button colorScheme={'twitter'}>{'관리자'}</Button>
+            </Link>}
             <Link to={paymentPage? '/':'payment'} onClick={()=>{
                 setPaymentPage(prev=>!prev)
             }}>
                 <Button colorScheme={'twitter'}>{paymentPage?'테이블':'결제'}</Button>
             </Link>
+            </HStack>
         </Stack>
         </Box>
     )
