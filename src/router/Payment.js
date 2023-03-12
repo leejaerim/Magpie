@@ -1,29 +1,20 @@
 import {
     Box,
-    HStack,
     Table,
     TableCaption,
     TableContainer,
     Tbody,
-    Text,
     Tfoot,
     Th,
     Thead,
     Tr,
     Td,
-    AlertDialogOverlay,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogBody,
-    AlertDialogFooter,
-    Button,
-    useDisclosure,
-    AlertDialog, Input
+    Button, useDisclosure
 } from "@chakra-ui/react";
-import {addDoc, deleteDoc, collection, doc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
+import { deleteDoc, collection, doc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
 import {dbService} from "../fbase";
-import {useOutletContext} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
+import MagpieAlertDialog from "../components/AlertDialog";
 
 const Payment =()=>{
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -54,7 +45,6 @@ const Payment =()=>{
         onClose();
     }
     let sumPrice = 0;
-
     useEffect(() => {
         if(date != null){
             onSnapshot(query(collection(dbService, "payment"), where("date", ">=", date)), async obj => {
@@ -112,35 +102,8 @@ const Payment =()=>{
                     </Tfoot>
                 </Table>
             </TableContainer>
-            <AlertDialog
-                isOpen={isOpen}
-                leastDestructiveRef={cancelRef}
-                onClose={onClose}
-            >
-                <AlertDialogOverlay>
-                    <AlertDialogContent>
-                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            update value
-                        </AlertDialogHeader>
-
-                        <AlertDialogBody>
-                            <Input type={'number'} value={value} onChange={onChange}></Input>
-                        </AlertDialogBody>
-
-                        <AlertDialogFooter>
-                            <Button ref={cancelRef} onClick={onClose}>
-                                Cancel
-                            </Button>
-                            <Button colorScheme='twitter' onClick={onSubmit} ml={3}>
-                                Update
-                            </Button>
-                            <Button colorScheme='red' onClick={onDeleteClick} ml={3}>
-                                Delete
-                            </Button>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialogOverlay>
-            </AlertDialog>
+            <MagpieAlertDialog isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} value={value}
+                               onChange={onChange} onSubmit={onSubmit} onDeleteClick={onDeleteClick}/>
         </Box>
     )
 

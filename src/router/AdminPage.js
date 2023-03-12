@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {addDoc, collection, onSnapshot, query, orderBy, limit} from "firebase/firestore";
 import {dbService} from "../fbase";
 import MenuFactory from "../components/MenuFactory";
+import MenuItem from "../components/MenuItem";
 const AdminPage =()=>{
     const [tableCount, setTableCount] = useState(0);
     const [menu, setMenu] = useState([]);
@@ -62,11 +63,7 @@ const AdminPage =()=>{
                 }}
             >
                 {menu.length && menu.map((menu,index)=>(
-                    <Text key={index}>
-                        {menu.menuName}
-                    ,{menu.menuPrice}
-
-                    </Text>
+                    <MenuItem data={menu}/>
                 ))}
             </Grid>
         </Box>
