@@ -5,12 +5,14 @@ import {
     AlertDialogOverlay,
     Box,
     Button, Input,
+    Text,
     Td,
     Tr,
     AlertDialog
 } from "@chakra-ui/react";
+import React from "react";
 
-const MagpieAlertDialog=({isOpen, cancelRef, onClose ,value ,onChange, onSubmit, onDeleteClick })=>{
+const UpdateAlertDialog=({isOpen, cancelRef, onClose ,value ,onChange, onSubmit, onDeleteClick, State, CharValue, onCharValueChange})=>{
     // const datamapRef = doc(dbService, "payment", datamap?.id);
     return(
         <Box>
@@ -22,22 +24,29 @@ const MagpieAlertDialog=({isOpen, cancelRef, onClose ,value ,onChange, onSubmit,
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            update value
+                            {State && State == 'add' ? 'Add Item' : 'Update Value'}
                         </AlertDialogHeader>
-
                         <AlertDialogBody>
+                            {State && State == 'add' ? (
+                                <>
+                                <Text>CharValue</Text>
+                                <Input value={CharValue} onChange={onCharValueChange}></Input></>) : (<></>)
+                            }
+                            Value
                             <Input type={'number'} value={value} onChange={onChange}></Input>
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
-                            <Button ref={cancelRef} onClick={onClose}>
+                            <Button colorScheme='twitter' onClick={onSubmit} >
+                                {State && State == 'add' ? 'Add Item' : 'Update Item'}
+                            </Button>
+                            {onDeleteClick && State != 'add' ? (
+                                <Button colorScheme='red' onClick={onDeleteClick} ml={3}>
+                                    Delete
+                                </Button>):(<></>)
+                            }
+                            <Button ref={cancelRef} onClick={onClose} ml={3}>
                                 Cancel
-                            </Button>
-                            <Button colorScheme='twitter' onClick={onSubmit} ml={3}>
-                                Update
-                            </Button>
-                            <Button colorScheme='red' onClick={onDeleteClick} ml={3}>
-                                Delete
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
@@ -46,4 +55,4 @@ const MagpieAlertDialog=({isOpen, cancelRef, onClose ,value ,onChange, onSubmit,
         </Box>
     )
 }
-export default MagpieAlertDialog
+export default UpdateAlertDialog

@@ -11,7 +11,7 @@ import {
     Text,
     Box, useDisclosure
 } from "@chakra-ui/react";
-import MagpieAlertDialog from "./AlertDialog";
+import UpdateAlertDialog from "./AlertDialog";
 import {deleteDoc, doc, updateDoc} from "firebase/firestore";
 import {dbService} from "../fbase";
 import {useRef, useState} from "react";
@@ -68,7 +68,7 @@ const MenuItem=({data})=>{
                 </ButtonGroup>
             </CardFooter>
         </Card>) : (<></>)}
-        <MagpieAlertDialog value={value} cancelRef={cancelRef} isOpen={isOpen} onChange={onChange} onDeleteClick={onDeleteClick} onClose={onClose} onSubmit={onSubmit}></MagpieAlertDialog>
+        <UpdateAlertDialog value={value} cancelRef={cancelRef} isOpen={isOpen} onChange={onChange} onDeleteClick={onDeleteClick} onClose={onClose} onSubmit={onSubmit}></UpdateAlertDialog>
         </>
 
     )

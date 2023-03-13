@@ -14,7 +14,7 @@ import {
 import { deleteDoc, collection, doc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
 import {dbService} from "../fbase";
 import {useEffect, useRef, useState} from "react";
-import MagpieAlertDialog from "../components/AlertDialog";
+import UpdateAlertDialog from "../components/AlertDialog";
 
 const Payment =()=>{
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -102,7 +102,7 @@ const Payment =()=>{
                     </Tfoot>
                 </Table>
             </TableContainer>
-            <MagpieAlertDialog isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} value={value}
+            <UpdateAlertDialog isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} value={value}
                                onChange={onChange} onSubmit={onSubmit} onDeleteClick={onDeleteClick}/>
         </Box>
     )

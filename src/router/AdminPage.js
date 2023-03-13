@@ -1,13 +1,20 @@
-import {Text, Box, HStack, Heading, Grid, Divider, Button} from "@chakra-ui/react";
+import {Text, Box, HStack, Heading, Grid, Divider, Button, useDisclosure} from "@chakra-ui/react";
 import NumberInput from "../components/NumberInput";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {addDoc, collection, onSnapshot, query, orderBy, limit} from "firebase/firestore";
 import {dbService} from "../fbase";
 import MenuFactory from "../components/MenuFactory";
 import MenuItem from "../components/MenuItem";
+import UpdateAlertDialog from "../components/AlertDialog";
 const AdminPage =()=>{
     const [tableCount, setTableCount] = useState(0);
     const [menu, setMenu] = useState([]);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = useRef()
+    const [name, setName] = useState('')
+    const [price, setPrice] = useState(0)
+    const handleNameChange = (e) => setName(e.target.value)
+    const handlePriceChange = (e) => setPrice(e.target.value)
     useEffect(() => {
         //getNweets();
         onSnapshot(query(
@@ -38,6 +45,18 @@ const AdminPage =()=>{
     const CountChange =number=>{
         setTableCount(parseInt(number))
     }
+    const onSubmit =async (e)=>{
+        e.preventDefault();
+        const menu_target = {
+            menuName: name,
+            menuPrice: price,
+            createAt: Date.now(),
+        }
+        try {
+            const docRef = await addDoc(collection(dbService, "menu"), menu_target)
+        } catch (e) {
+        }
+    }
     return (
         <Box>
             <Heading>ADMIN PAGE</Heading>
@@ -46,9 +65,10 @@ const AdminPage =()=>{
                 <Text>테이블 수 : </Text>
                 {tableCount != 0 ? <NumberInput Count={tableCount} CountChange={CountChange}></NumberInput> : <></>}
                 <Button colorScheme={"twitter"} onClick={onSave}>저장</Button>
+                <Button colorScheme={"twitter"} onClick={()=>{onOpen()}} >메뉴 추가</Button>
             </HStack>
             <Divider pb={"10px;"}></Divider>
-            <MenuFactory></MenuFactory>
+            {/*<MenuFactory></MenuFactory>*/}
             <Divider pb={"10px;"}></Divider>
             <Grid
                 mt={10}
@@ -66,6 +86,9 @@ const AdminPage =()=>{
                     <MenuItem data={menu}/>
                 ))}
             </Grid>
+            <UpdateAlertDialog isOpen={isOpen} onClose={onClose} cancelRef={cancelRef} value={price} State={'add'} CharValue={name}
+                onChange={handlePriceChange} onCharValueChange={handleNameChange} onSubmit={onSubmit}
+            />
         </Box>
     )
 
