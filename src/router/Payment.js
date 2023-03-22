@@ -15,6 +15,8 @@ import { deleteDoc, collection, doc, onSnapshot, query, updateDoc, where} from "
 import {dbService} from "../fbase";
 import {useEffect, useRef, useState} from "react";
 import UpdateAlertDialog from "../components/AlertDialog";
+import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
+
 
 const Payment =()=>{
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -65,10 +67,27 @@ const Payment =()=>{
                 } = e;
                 setDate(prev => value)
             }}/>
+            <Button  onClick={(e)=>{
+                e.preventDefault();
+                setDate(prev=>{
+                    let temp_date = new Date(prev)
+                    temp_date.setDate(temp_date.getDate() - 1);
+                    return temp_date.toISOString().substring(0, 10);
+                });
+            }} colorScheme={"twitter"} ml={"5"}><FaArrowLeft id={"Left"} color={"#fff"}></FaArrowLeft></Button>
             <Button colorScheme={"twitter"} ml={"5"} onClick={(e)=>{
                 e.preventDefault();
                 setDate(dateTime.split(' ')[0]);
             }}>Today</Button>
+            <Button  onClick={(e)=>{
+                e.preventDefault();
+                setDate(prev=>{
+                    let temp_date = new Date(prev)
+                    temp_date.setDate(temp_date.getDate() + 1);
+                    return temp_date.toISOString().substring(0, 10);
+                });
+            }}colorScheme={"twitter"} ml={"5"}><FaArrowRight id={"Right"} color={"#fff"}></FaArrowRight></Button>
+
             <TableContainer>
                 <Table variant='simple'>
                     <TableCaption>{dateTime.split(' ')[0]} 매출 내역</TableCaption>
