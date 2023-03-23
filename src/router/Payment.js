@@ -49,7 +49,7 @@ const Payment =()=>{
     let sumPrice = 0;
     useEffect(() => {
         if(date != null){
-            onSnapshot(query(collection(dbService, "payment"), where("date", ">=", date)), async obj => {
+            onSnapshot(query(collection(dbService, "payment"),where("date", ">=", date+" 00:00:00"), where("date", "<=", date+" 23:59:59")), async obj => {
                 if(obj.docs.length != 0){
                     setDataMap(prev => obj.docs)
                 }else{
