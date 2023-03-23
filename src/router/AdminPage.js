@@ -13,6 +13,7 @@ const AdminPage =()=>{
     const cancelRef = useRef()
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
+    const [seq, setSeq] = useState(0)
     const handleNameChange = (e) => setName(e.target.value)
     const handlePriceChange = (e) => setPrice(e.target.value)
     useEffect(() => {
@@ -24,7 +25,8 @@ const AdminPage =()=>{
         ), obj => {
             setTableCount(obj.docs[0].data().number_of_table);
         })
-        onSnapshot(collection(dbService, "menu"), obj => {
+        onSnapshot(query(collection(dbService, "menu"),orderBy("seq", "asc")), obj => {
+            setSeq(obj.docs.length);
             setMenu(obj.docs.map((doc) => ({
                 id: doc.id,
             ...doc.data(),
@@ -51,6 +53,7 @@ const AdminPage =()=>{
             menuName: name,
             menuPrice: price,
             createAt: Date.now(),
+            seq : seq,
         }
         try {
             const docRef = await addDoc(collection(dbService, "menu"), menu_target)

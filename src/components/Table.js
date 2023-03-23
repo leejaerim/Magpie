@@ -1,7 +1,7 @@
 import TableCard from "./TableCard";
 import {Box, Button, Divider, Text} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
-import {collection, onSnapshot, query, doc, where, addDoc, updateDoc} from "firebase/firestore";
+import {collection, onSnapshot, query, doc, where, addDoc, updateDoc, orderBy} from "firebase/firestore";
 import {dbService} from "../fbase";
 
 const Table =({index, setIndex, table_index,table_price})=> {
@@ -20,7 +20,7 @@ const Table =({index, setIndex, table_index,table_price})=> {
     },[count,menus])
     useEffect(() => {
         //getNweets();
-        onSnapshot(collection(dbService, "menu"), obj => {
+        onSnapshot(query(collection(dbService, "menu"),orderBy("seq","asc")), obj => {
             setMenus(obj.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
