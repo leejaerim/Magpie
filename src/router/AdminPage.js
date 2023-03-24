@@ -47,16 +47,18 @@ const AdminPage =()=>{
     const CountChange =number=>{
         setTableCount(parseInt(number))
     }
-    const onSubmit =async (e)=>{
+    const onSubmit =async (e,attach)=>{
         e.preventDefault();
         const menu_target = {
             menuName: name,
             menuPrice: price,
             createAt: Date.now(),
             seq : seq,
+            attachUrl : attach
         }
         try {
             const docRef = await addDoc(collection(dbService, "menu"), menu_target)
+            alert("Done!")
         } catch (e) {
         }
     }

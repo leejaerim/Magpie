@@ -1,7 +1,7 @@
-import {Input, Box, Button, Heading, HStack} from "@chakra-ui/react";
+import {Input, Box, Button, Heading, HStack, Image} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 
-const TableCard = ({index, menu_name,menu_price, sum, sub, count, countPlus, countMinus})=>{
+const TableCard = ({index, menu_name,menu_price, sum, sub, count, countPlus, countMinus,attachurl})=>{
     const price = menu_price;
     const UpCount =(e)=>{
         sum(price)
@@ -17,6 +17,7 @@ const TableCard = ({index, menu_name,menu_price, sum, sub, count, countPlus, cou
     return(
         <Box>
             <Heading>{menu_name}</Heading>
+            {attachurl && (<Image h={"10%"} w={"10%"} src={attachurl}></Image>) }
             <HStack>
                 <Input w={'50%'} value={menu_price*count}/>
                 <Button color={'black'}>{count}</Button>

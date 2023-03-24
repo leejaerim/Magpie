@@ -45,7 +45,7 @@ const MenuItem=({data})=>{
         {data !== null ? (<Card maxW='sm'>
             <CardBody>
                 <Image
-                    src='/defaultBox.png'
+                    src={data.attachUrl ? data.attachUrl : '/defaultBox.png'}
                     alt='Green double couch with wooden legs'
                     borderRadius='lg'
                 />

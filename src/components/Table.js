@@ -80,7 +80,7 @@ const Table =({index, setIndex, table_index,table_price})=> {
     return (
         <Box className={index === table_index ? 'active':'none'}>
             {menus.map((menu, i)=>(
-                <TableCard key={i} index={i} sum={SumPrice} sub={SubPrice} menu_name={menu.menuName} menu_price={parseInt(menu.menuPrice)} countPlus={countPlus} count={count[i]} countMinus={countMinus}></TableCard>
+                <TableCard key={i} index={i} attachurl={menu.attachUrl} sum={SumPrice} sub={SubPrice} menu_name={menu.menuName} menu_price={parseInt(menu.menuPrice)} countPlus={countPlus} count={count[i]} countMinus={countMinus}></TableCard>
             ))}
             <Divider mt={5} mb={5} orientation='horizontal' />
             <Button w={'30%'} size={'lg'} colorScheme='twitter' onClick={setIndex}>테이블</Button>
