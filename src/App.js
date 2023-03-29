@@ -1,12 +1,14 @@
 import Table from "./components/Table";
 import Header from "./components/Header";
 import HomeTab from "./components/HomeTab";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Outlet} from "react-router-dom";
 import {addDoc, collection, doc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
-import {dbService} from "./fbase";
+import {AuthService, dbService} from "./fbase";
+import AuthForm from "./components/AuthForm";
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(AuthService.currentUser);
     const [sum , setSum] = useState(0)
     let dateTime = new Date();
     dateTime.setHours(dateTime.getHours() + 9);
@@ -39,8 +41,9 @@ function App() {
     }
   return (
     <div className="App">
-        <Header table_sum={sum}></Header>
-        <Outlet context={[table_price]}/>
+        {isLoggedIn ? (<><Header table_sum={sum}></Header>
+            <Outlet context={[table_price]}/></>):<AuthForm/>}
+
     </div>
   );
 }
