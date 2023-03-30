@@ -16,6 +16,7 @@ const AuthForm =()=>{
     const [error, setError] = useState("");
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("");
+    const [repassword , setRepassword] = useState("");
     const [newAccount, setNewAccount] = useState(false);
 
 
@@ -28,6 +29,8 @@ const AuthForm =()=>{
             setEmail(value)
         }else if(name === "password"){
             setPassword(value)
+        }else if(name === "repassword"){
+            setRepassword(value)
         }
     }
     const onSubmit =async (e)=>{
@@ -35,9 +38,12 @@ const AuthForm =()=>{
         try{
             let data;
             if(newAccount){
+                if(password === repassword) {
+                    data = await createUserWithEmailAndPassword(AuthService, email, password);
+                }else{
+                    alert("Not same password")
+                }
                 //create Account
-                data = await createUserWithEmailAndPassword(AuthService, email,password);
-
             }else{
                 //login
                 data = await signInWithEmailAndPassword(AuthService,email,password);
@@ -48,10 +54,22 @@ const AuthForm =()=>{
         }
 
     }
+    const _onOpen=(e)=>{
+        const {target : {name}} = e;
+        if(name === 'login'){
+            setNewAccount(false)
+        }else{
+            setNewAccount(true)
+        }
+        onOpen();
+    }
     return (
-        <div>
-            <Button colorScheme='red' onClick={onOpen}>
+        <div style={{marginTop:"10px",display:'flex',justifyContent:'center'}}>
+            <Button mr={'10px;'} name={'login'} colorScheme='red' onClick={_onOpen}>
                 Login
+            </Button>
+            <Button colorScheme='red' onClick={_onOpen}>
+                Join
             </Button>
             <AlertDialog
                 isOpen={isOpen}
@@ -61,18 +79,19 @@ const AuthForm =()=>{
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Login
+                            {newAccount? 'Join' : 'Login'}
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
                             <Input name={"email"} type={'email'} value={email} placeholder={"Email"} onChange={onChange} required></Input>
                             <Input name={"password"} type={'password'} value={password} placeholder={"Password"} onChange={onChange} required></Input>
+                            {newAccount? <Input name={"repassword"} type={'password'} value={repassword} placeholder={"re-Password"} onChange={onChange} required></Input>:''}
                             {error}
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
                             <Button onClick={onSubmit}>
-                                Login
+                                {newAccount? 'Create Account' : 'Login'}
                             </Button>
                             <Button colorScheme='red' ref={cancelRef}  onClick={onClose} ml={3}>
                                 Cancel
@@ -81,21 +100,6 @@ const AuthForm =()=>{
                     </AlertDialogContent>
                 </AlertDialogOverlay>
             </AlertDialog>
-            {/*<form onSubmit={onSubmit}>*/}
-            {/*    <input name="email"type="email" placeholder="Eamil" required value={email} onChange={onChange}>*/}
-            {/*    </input>*/}
-            {/*    <input name="password" type="password" placeholder="Eamil" required value={password}onChange={onChange}>*/}
-            {/*    </input>*/}
-            {/*    <Button*/}
-            {/*        colorScheme='twitter'*/}
-            {/*        type='submit'*/}
-            {/*    >*/}
-            {/*        {newAccount ? "Create Account" : "Login"}*/}
-            {/*    </Button>*/}
-            {/*    <Button colorScheme={"twitter"} onClick={toggleAccount}> {newAccount ? "Login" : "Join in" } </Button>*/}
-            {/*</form>*/}
-
-
         </div>
 
     )

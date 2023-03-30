@@ -2,12 +2,18 @@
 import {FaReact} from "react-icons/fa";
 import {Box, HStack, VStack, Text, Stack, Button} from "@chakra-ui/react";
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {AuthService} from "../fbase";
 export default function Header({table_sum}) {
     const date = new Date();
     const [paymentPage,setPaymentPage] = useState(false);
     const daydict = {0:'일',1:'월',2:'화',3:'수',4:'목',5:'금',6:'토'}
     const dateText = `${date.getFullYear()}년 ${date.getMonth()+1}월 ${date.getDate()}일 ${daydict[date.getDay()]}요일`
+    const navi = useNavigate();
+    const onLogoutClick=_=>{
+        AuthService.signOut();
+        navi("/");
+    }
     return(
         <Box>
             <Stack
@@ -46,6 +52,7 @@ export default function Header({table_sum}) {
                 }}>
                     <Button colorScheme={'twitter'}>{paymentPage?'테이블':'결제'}</Button>
                 </Link>
+                <Button colorScheme={'twitter'} onClick={onLogoutClick}>로그아웃</Button>
                 </HStack>
             </Stack>
         </Box>

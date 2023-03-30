@@ -13,6 +13,16 @@ function App() {
     let dateTime = new Date();
     dateTime.setHours(dateTime.getHours() + 9);
     dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
+    useEffect(() => {
+        AuthService.onAuthStateChanged((user) => {
+            if (user) {
+                setIsLoggedIn(true);
+                //setUserObj(user)
+            } else {
+                setIsLoggedIn(false);
+            }
+        })
+    }, [])
     useEffect(()=>{
         onSnapshot(query(collection(dbService, "payment"), where("date", ">=", dateTime.split(' ')[0])), async obj => {
             if(obj.docs.length != 0){
