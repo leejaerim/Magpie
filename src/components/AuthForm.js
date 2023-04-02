@@ -7,8 +7,9 @@ import {
     AlertDialogContent, AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogOverlay, Box,
-    Button, Input, Text, useDisclosure
+    Button, HStack, Input, InputGroup, InputLeftElement, Text, useDisclosure
 } from "@chakra-ui/react";
+import { FaUserAlt, FaLock} from "react-icons/fa";
 
 const AuthForm =()=>{
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -83,8 +84,26 @@ const AuthForm =()=>{
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
-                            <Input name={"email"} type={'email'} value={email} placeholder={"Email"} onChange={onChange} required></Input>
-                            <Input name={"password"} type={'password'} value={password} placeholder={"Password"} onChange={onChange} required></Input>
+                            <InputGroup>
+                                <InputLeftElement
+                                    children={
+                                        <Box color="gray.400">
+                                            <FaUserAlt />
+                                        </Box>
+                                    }
+                                />
+                                <Input name={"email"} type={'email'} value={email} placeholder={"Email"} onChange={onChange} required onKeyDown={(e)=>{if(e.keyCode == 13) onSubmit(e)}}></Input>
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLeftElement
+                                    children={
+                                        <Box color="gray.400">
+                                            <FaLock />
+                                        </Box>
+                                    }
+                                />
+                                <Input name={"password"} type={'password'} value={password} placeholder={"Password"} onChange={onChange} required onKeyDown={(e)=>{if(e.keyCode == 13) onSubmit(e)}}></Input>
+                            </InputGroup>
                             {newAccount? <Input name={"repassword"} type={'password'} value={repassword} placeholder={"re-Password"} onChange={onChange} required></Input>:''}
                             {error}
                         </AlertDialogBody>
