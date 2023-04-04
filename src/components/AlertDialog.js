@@ -8,11 +8,12 @@ import {
     Text,
     Td,
     Tr,
-    AlertDialog
+    AlertDialog, InputLeftElement, InputGroup
 } from "@chakra-ui/react";
 import React, {useState} from "react";
 import {getDownloadURL, ref, uploadString} from "firebase/storage";
 import {dbService, storageRef} from "../fbase";
+import {FaRegEdit, FaMoneyCheckAlt, FaImage} from "react-icons/fa";
 
 const UpdateAlertDialog=({isOpen, cancelRef, onClose ,value ,onChange, onSubmit, onDeleteClick, State, CharValue, onCharValueChange})=>{
     const [attachment, setAttachment] = useState('')
@@ -52,29 +53,56 @@ const UpdateAlertDialog=({isOpen, cancelRef, onClose ,value ,onChange, onSubmit,
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            {State && State == 'add' ? 'Add Item' : 'Update Value'}
+                            {State && State == 'add' ? '메뉴 추가하기' : '메뉴 수정하기'}
                         </AlertDialogHeader>
                         <AlertDialogBody>
                             {State && State == 'add' ? (
                                 <>
-                                <Text>CharValue</Text>
-                                <Input value={CharValue} onChange={onCharValueChange}></Input><Text>Image</Text><Input type={"file"} accept={"image/*"} onChange={onFileChange}/></>) : (<></>)
+                                    <InputGroup>
+                                        <InputLeftElement
+                                            children={
+                                                <Box color="gray.400">
+                                                    <FaRegEdit />
+                                                </Box>
+                                            }
+                                        />
+                                        <Input value={CharValue} onChange={onCharValueChange} placeholder={"이름"}></Input>
+                                    </InputGroup>
+                                </>) : (<></>)
                             }
-                            <Text>Value</Text>
-                            <Input type={'number'} value={value} onChange={onChange}></Input>
+                            <InputGroup>
+                                <InputLeftElement
+                                    children={
+                                        <Box color="gray.400">
+                                            <FaMoneyCheckAlt />
+                                        </Box>
+                                    }
+                                />
+                                <Input type={'number'} value={value} onChange={onChange} placeholder={"가격"}></Input>
+                            </InputGroup>
+                            <InputGroup>
+                                <InputLeftElement
+                                    children={
+                                        <Box color="gray.400">
+                                            <FaImage />
+                                        </Box>
+                                    }
+                                />
+                                <Input type={"file"} accept={"image/*"} onChange={onFileChange} placeholder={"이미지"}/>
+                            </InputGroup>
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
                             <Button colorScheme='twitter' onClick={_onSubmit} >
-                                {State && State == 'add' ? 'Add Item' : 'Update Item'}
+                                {State && State == 'add' ? '메뉴 추가' : '메뉴 수정'}
                             </Button>
                             {onDeleteClick && State != 'add' ? (
                                 <Button colorScheme='red' onClick={onDeleteClick} ml={3}>
-                                    Delete
+                                    삭제
                                 </Button>):(<></>)
                             }
                             <Button ref={cancelRef} onClick={onClose} ml={3}>
-                                Cancel
+                                취소
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>

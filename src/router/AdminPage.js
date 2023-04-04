@@ -59,6 +59,7 @@ const AdminPage =()=>{
         try {
             const docRef = await addDoc(collection(dbService, "menu"), menu_target)
             alert("Done!")
+            onClose();
         } catch (e) {
         }
     }

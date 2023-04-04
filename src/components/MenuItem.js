@@ -22,9 +22,10 @@ const MenuItem=({data})=>{
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef();
 
-    const onSubmit = async (e) => {
+    const onSubmit = async (e,attach) => {
         e.preventDefault();
-        await updateDoc(menuRef, { value: parseInt(value)});
+        let target = attach ? {value : parseInt(value), attachUrl : attach} : { value: parseInt(value)}
+        await updateDoc(menuRef, target);
         onClose();
     }
     const onChange = (e) => {
@@ -60,10 +61,10 @@ const MenuItem=({data})=>{
             <CardFooter>
                 <ButtonGroup spacing='2'>
                     <Button variant='solid' colorScheme='twitter' onClick={(e)=>{onOpen();}}>
-                        Update
+                        수정
                     </Button>
                     <Button variant='solid' colorScheme='red' color={'twitter.50'} onClick={onDeleteClick}>
-                        delete
+                        삭제
                     </Button>
                 </ButtonGroup>
             </CardFooter>
