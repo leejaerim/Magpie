@@ -56,20 +56,16 @@ const UpdateAlertDialog=({isOpen, cancelRef, onClose ,value ,onChange, onSubmit,
                             {State && State == 'add' ? '메뉴 추가하기' : '메뉴 수정하기'}
                         </AlertDialogHeader>
                         <AlertDialogBody>
-                            {State && State == 'add' ? (
-                                <>
-                                    <InputGroup>
-                                        <InputLeftElement
-                                            children={
-                                                <Box color="gray.400">
-                                                    <FaRegEdit />
-                                                </Box>
-                                            }
-                                        />
-                                        <Input value={CharValue} onChange={onCharValueChange} placeholder={"이름"}></Input>
-                                    </InputGroup>
-                                </>) : (<></>)
-                            }
+                            <InputGroup>
+                                <InputLeftElement
+                                    children={
+                                        <Box color="gray.400">
+                                            <FaRegEdit />
+                                        </Box>
+                                    }
+                                />
+                                <Input value={CharValue} onChange={onCharValueChange} placeholder={"이름"}></Input>
+                            </InputGroup>
                             <InputGroup>
                                 <InputLeftElement
                                     children={

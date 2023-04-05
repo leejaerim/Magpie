@@ -21,13 +21,14 @@ const MenuItem=({data})=>{
     const [value, setValue] = useState(data.menuPrice);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef();
-
+    const [name , setName] = useState(data.menuName)
     const onSubmit = async (e,attach) => {
         e.preventDefault();
-        let target = attach ? {value : parseInt(value), attachUrl : attach} : { value: parseInt(value)}
+        let target = attach ? { menuName : name, menuPrice : parseInt(value), attachUrl : attach} : {menuName : name,menuPrice: parseInt(value)}
         await updateDoc(menuRef, target);
         onClose();
     }
+    const handleNameChange = (e) => setName(e.target.value)
     const onChange = (e) => {
         const {
             target: { value },
@@ -69,9 +70,8 @@ const MenuItem=({data})=>{
                 </ButtonGroup>
             </CardFooter>
         </Card>) : (<></>)}
-        <UpdateAlertDialog value={value} cancelRef={cancelRef} isOpen={isOpen} onChange={onChange} onDeleteClick={onDeleteClick} onClose={onClose} onSubmit={onSubmit}></UpdateAlertDialog>
+        <UpdateAlertDialog  CharValue={name} onCharValueChange={handleNameChange} value={value} cancelRef={cancelRef} isOpen={isOpen} onChange={onChange} onDeleteClick={onDeleteClick} onClose={onClose} onSubmit={onSubmit}></UpdateAlertDialog>
         </>
-
     )
 }
 export default MenuItem
