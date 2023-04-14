@@ -34,8 +34,8 @@ const UpdateAlertDialog=({isOpen, cancelRef, onClose ,value ,onChange, onSubmit,
         e.preventDefault();
         let attachmentUrl = "";
         if(attachment != ""){
-            const filename = 'test'
-            const testRef = ref(storageRef,filename)
+            const filename = `${CharValue}_${new Date().getTime()}`;
+            const testRef = ref(storageRef,filename);
             const upload_result = await uploadString(testRef,attachment,'data_url')
             attachmentUrl =  await getDownloadURL(upload_result.ref)
             onSubmit(e, attachmentUrl)
