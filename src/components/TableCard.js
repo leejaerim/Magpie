@@ -1,4 +1,4 @@
-import {Input, Box, Button, Heading, HStack, Image} from "@chakra-ui/react";
+import {Text,Input, Box, Button, Heading, HStack, Image, Card, Stack, CardBody, CardFooter} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 
 const TableCard = ({index, menu_name,menu_price, sum, sub, count, countPlus, countMinus,attachurl})=>{
@@ -15,16 +15,41 @@ const TableCard = ({index, menu_name,menu_price, sum, sub, count, countPlus, cou
     }
     //메뉴 이름, 수량, +, -
     return(
-        <Box>
-            <Heading>{menu_name}</Heading>
-            {attachurl && (<Image h={"10%"} w={"10%"} src={attachurl}></Image>) }
-            <HStack>
-                <Input w={'50%'} value={menu_price*count}/>
-                <Button color={'black'}>{count}</Button>
-                <Button colorScheme='red' onClick={UpCount}>+</Button>
-                <Button colorScheme='blue' onClick={DownCount}>-</Button>
-            </HStack>
-        </Box>
+        <Card
+            direction={{ base: 'column', sm: 'row' }}
+            overflow='hidden'
+            variant='outline'
+        >
+            {attachurl ? (
+            <Image
+                objectFit='cover'
+                maxW={{ base: '100%', sm: '200px' }}
+                src={attachurl}
+                alt={menu_name}
+            />
+            ) : (<Image
+                objectFit='cover'
+                maxW={{ base: '100%', sm: '200px' }}
+                src='/defaultBox.png'
+                alt={menu_name}
+            />) }
+            <Stack>
+                <CardBody>
+                    <Heading size='md'>{menu_name}</Heading>
+                    <Text py='2'>
+                        {menu_price} 원
+                    </Text>
+                </CardBody>
+                <CardFooter>
+                    <HStack>
+                        <Input w={'50%'} value={menu_price*count}/>
+                        <Button color={'black'}>{count}</Button>
+                        <Button colorScheme='red' onClick={UpCount}>+</Button>
+                        <Button colorScheme='blue' onClick={DownCount}>-</Button>
+                    </HStack>
+                </CardFooter>
+            </Stack>
+        </Card>
     )
 }
 export default TableCard;
