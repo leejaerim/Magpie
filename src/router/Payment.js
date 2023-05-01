@@ -11,51 +11,37 @@ import {
     Td,
     Button, useDisclosure
 } from "@chakra-ui/react";
-import { deleteDoc, collection, doc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
-import {dbService} from "../fbase";
 import {useEffect, useRef, useState} from "react";
 import UpdateAlertDialog from "../components/AlertDialog";
 import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
+import {useQuery} from "@tanstack/react-query";
+import {getPayment} from "../api/api_payment.js";
 
 
 const Payment =()=>{
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isLoading, data:dataMap ,refetch} = useQuery([`payment`], getPayment);
+
     const cancelRef = useRef()
-    const [dataMap, setDataMap] = useState([])
-    const [paymentRef, setPaymentRef] = useState(null)
+    // const [dataMap, setDataMap] = useState([])
     const [value, setValue] = useState(0)
     let dateTime = new Date();
     dateTime.setHours(dateTime.getHours() + 9);
     dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
     const [date, setDate] = useState(dateTime.split(' ')[0])
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        await updateDoc(paymentRef, { value: parseInt(value)});
-        onClose()
-    }
+
+    console.log(isLoading,dataMap)
+
     const onChange = (e) => {
         const {
             target: { value },
         } = e;
         setValue(prev => value)
     }
-    const onDeleteClick = async (e) => {
-        const confirm_ok = window.confirm("delete this?");
-        if (confirm_ok) {
-            await deleteDoc(paymentRef);
-        }
-        onClose();
-    }
     let sumPrice = 0;
     useEffect(() => {
         if(date != null){
-            onSnapshot(query(collection(dbService, "payment"),where("date", ">=", date+" 00:00:00"), where("date", "<=", date+" 23:59:59")), async obj => {
-                if(obj.docs.length != 0){
-                    setDataMap(prev => obj.docs)
-                }else{
-                    setDataMap([])
-                }
-            })
+            refetch()
         }
     },[date,])
 
@@ -93,22 +79,23 @@ const Payment =()=>{
                     <TableCaption>{dateTime.split(' ')[0]} 매출 내역</TableCaption>
                     <Thead>
                         <Tr>
-                            {dataMap.length != 0 && Object.keys(dataMap[0].data()).map(datamap=> (
-                                        <Td>{datamap}</Td>
-                            ))}
+                            {!isLoading  && Object.keys(dataMap?.row[0]).map(key=> {
+                                if (key != 'payment_id'){
+                                    return(<Td>{key}</Td>)
+                                }})}
                         </Tr>
                     </Thead>
-                        {dataMap.length != 0 && dataMap.map(datamap=>{
-                            sumPrice += datamap.data().value
+                        {!isLoading && dataMap?.row.map(datamap=>{
+                            sumPrice += datamap.value
+                            debugger;
                             return(
                                 <Tbody>
                                 <Tr onClick={(e)=>{
-                                        setPaymentRef(prev=>doc(dbService, "payment", e.target.dataset.id));
-                                        setValue(datamap.data().value)
+                                        setValue(datamap.value)
                                         onOpen();
                                 }}>
-                                    <Td data-id={datamap.id}>{datamap.data().date}</Td>
-                                    <Td data-id={datamap.id}>{datamap.data().value}</Td>
+                                    <Td data-id={datamap.payment_id}>{datamap.reg_date}</Td>
+                                    <Td data-id={datamap.payment_id}>{datamap.value}</Td>
                                 </Tr>
                             </Tbody>
                             )
@@ -122,7 +109,7 @@ const Payment =()=>{
                 </Table>
             </TableContainer>
             <UpdateAlertDialog isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} value={value}
-                               onChange={onChange} onSubmit={onSubmit} onDeleteClick={onDeleteClick}/>
+                               onChange={onChange} onSubmit={()=>{}} onDeleteClick={()=>{}}/>
         </Box>
     )
 
