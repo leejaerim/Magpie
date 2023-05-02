@@ -19,9 +19,7 @@ import {getPayment} from "../api/api_payment.js";
 
 
 const Payment =()=>{
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const { isLoading, data:dataMap ,refetch} = useQuery([`payment`], getPayment);
-
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef()
     // const [dataMap, setDataMap] = useState([])
     const [value, setValue] = useState(0)
@@ -29,9 +27,7 @@ const Payment =()=>{
     dateTime.setHours(dateTime.getHours() + 9);
     dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
     const [date, setDate] = useState(dateTime.split(' ')[0])
-
-    console.log(isLoading,dataMap)
-
+    const { isLoading, data:dataMap ,refetch} = useQuery([`payment`,date], getPayment);
     const onChange = (e) => {
         const {
             target: { value },
@@ -44,7 +40,6 @@ const Payment =()=>{
             refetch()
         }
     },[date,])
-
     return(
         <Box>
             <input value={date} style={{paddingLeft : '100px;'}} type="date" onChange={(e)=>{
@@ -76,18 +71,16 @@ const Payment =()=>{
 
             <TableContainer>
                 <Table variant='simple'>
-                    <TableCaption>{dateTime.split(' ')[0]} 매출 내역</TableCaption>
+                    <TableCaption>{date} 매출 내역</TableCaption>
                     <Thead>
                         <Tr>
-                            {!isLoading  && Object.keys(dataMap?.row[0]).map(key=> {
-                                if (key != 'payment_id'){
-                                    return(<Td>{key}</Td>)
-                                }})}
+                            {!isLoading && dataMap?.row.length != 0  && Object.keys(dataMap?.row[0]).map(key=> (
+                                    (key!='payment_id') &&<Td>{key}</Td>
+                            ))}
                         </Tr>
                     </Thead>
-                        {!isLoading && dataMap?.row.map(datamap=>{
+                        {!isLoading && dataMap?.row.length != 0 && dataMap?.row.map(datamap=>{
                             sumPrice += datamap.value
-                            debugger;
                             return(
                                 <Tbody>
                                 <Tr onClick={(e)=>{

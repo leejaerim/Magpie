@@ -1,4 +1,5 @@
 import axiosInstance from "./instance";
 
-export const getPayment = () =>
-    axiosInstance.get(`payment/`).then((response) => response.data);
+export const getPayment = ({ queryKey }) =>
+    //${queryKey[1]}
+    axiosInstance.get(`payment?date=${queryKey[1]}`).then((response) => response.data);
