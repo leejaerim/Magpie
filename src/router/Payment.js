@@ -55,8 +55,8 @@ const Payment =()=>{
                     temp_date.setDate(temp_date.getDate() - 1);
                     return temp_date.toISOString().substring(0, 10);
                 });
-            }} colorScheme={"twitter"} ml={"5"}><FaArrowLeft id={"Left"} color={"#fff"}></FaArrowLeft></Button>
-            <Button colorScheme={"twitter"} ml={"5"} onClick={(e)=>{
+            }} colorScheme={"twitter"} ml={"2"}><FaArrowLeft id={"Left"} color={"#fff"}></FaArrowLeft></Button>
+            <Button colorScheme={"twitter"} ml={"2"} onClick={(e)=>{
                 e.preventDefault();
                 setDate(dateTime.split(' ')[0]);
             }}>Today</Button>
@@ -67,7 +67,7 @@ const Payment =()=>{
                     temp_date.setDate(temp_date.getDate() + 1);
                     return temp_date.toISOString().substring(0, 10);
                 });
-            }}colorScheme={"twitter"} ml={"5"}><FaArrowRight id={"Right"} color={"#fff"}></FaArrowRight></Button>
+            }}colorScheme={"twitter"} ml={"2"}><FaArrowRight id={"Right"} color={"#fff"}></FaArrowRight></Button>
 
             <TableContainer>
                 <Table variant='simple'>

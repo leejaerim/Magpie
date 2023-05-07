@@ -10,7 +10,6 @@ import {
     Button, HStack, Input, InputGroup, InputLeftElement, Text, useDisclosure
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock} from "react-icons/fa";
-import FileUpload from "./FileUpload";
 
 const AuthForm =()=>{
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -67,7 +66,6 @@ const AuthForm =()=>{
     }
     return (
         <div style={{marginTop:"10px",display:'flex',justifyContent:'center'}}>
-            <FileUpload></FileUpload>
             <Button mr={'10px;'} name={'login'} colorScheme='red' onClick={_onOpen}>
                 Login
             </Button>
