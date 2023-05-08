@@ -1,6 +1,6 @@
 import axiosInstance from "./instance";
 
-export const postPayment = (formData) => {
+export const postFileUpload = (formData) => {
     axiosInstance
         .post('http://127.0.0.1:8000/fileupload', formData)
         .then((response) => {

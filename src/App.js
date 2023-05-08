@@ -6,6 +6,8 @@ import {Outlet} from "react-router-dom";
 import {addDoc, collection, doc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
 import {AuthService, dbService} from "./fbase";
 import AuthForm from "./components/AuthForm";
+import {getPayment, postPayment} from "./api/api_payment";
+import {useQuery} from "@tanstack/react-query";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(AuthService.currentUser);
@@ -13,6 +15,7 @@ function App() {
     let dateTime = new Date();
     dateTime.setHours(dateTime.getHours() + 9);
     dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
+    const { isLoading, data:dataMap ,refetch} = useQuery([`payment`,dateTime.split(' ')[0]], getPayment);
     useEffect(() => {
         AuthService.onAuthStateChanged((user) => {
             if (user) {
@@ -24,25 +27,23 @@ function App() {
         })
     }, [])
     useEffect(()=>{
-        onSnapshot(query(collection(dbService, "payment"), where("date", ">=", dateTime.split(' ')[0])), async obj => {
-            if(obj.docs.length != 0){
-                let temp = 0
-                obj.docs.map(data=>{ temp += data.data().value;})
-                setSum(temp)
-            }else{
-                setSum(prev=>0)
-            }
-        })
+        if(!isLoading){
+            let temp = 0
+            dataMap.row.forEach(i=>temp+=i.value)
+            setSum(prev=>temp)
+        }
     },[])
 
     const table_price= async (table_value)=>{
         const table_result = {
-            value: table_value,
-            date: dateTime,
+            value: table_value
         }
         try {
-            const docRef = await addDoc(collection(dbService, "payment"), table_result)
+            const target = await postPayment(table_result)
+            refetch()
+            // const docRef = await addDoc(collection(dbService, "payment"), table_result)
         } catch (e) {
+            console.log(e)
         }
         // if(ref != null){
         //     updateDoc(ref, { value: sum+table_value});

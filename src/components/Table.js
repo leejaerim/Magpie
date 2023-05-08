@@ -56,11 +56,13 @@ const Table = ({index, setIndex, table_index, table_price}) => {
     }
 
     const payment = async () => {
-        table_price(totalPrice)
-        setTotalPrice(0)
-        setCount(prev => [...Array(prev.length).keys()].map(i => 0))
-        if (ref != null) {
-            await updateDoc(ref, {count: [...Array(count.length).keys()].map(i => 0)});
+        if(totalPrice > 0){
+            table_price(totalPrice)
+            setTotalPrice(0)
+            setCount(prev => [...Array(prev.length).keys()].map(i => 0))
+            if (ref != null) {
+                await updateDoc(ref, {count: [...Array(count.length).keys()].map(i => 0)});
+            }
         }
     }
     const countPlus = async (i) => {
