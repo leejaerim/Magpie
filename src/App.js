@@ -27,21 +27,32 @@ function App() {
         })
     }, [])
     useEffect(()=>{
-        if(!isLoading){
-            let temp = 0
-            dataMap.row.forEach(i=>temp+=i.value)
-            setSum(prev=>temp)
-        }
+        // if(!isLoading){
+        //     let temp = 0
+        //     dataMap.row.forEach(i=>temp+=i.value)
+        //     setSum(prev=>temp)
+        // }
+        onSnapshot(query(collection(dbService, "payment"), where("date", ">=", dateTime.split(' ')[0])), async obj => {
+            if(obj.docs.length != 0){
+                let temp = 0
+                obj.docs.map(data=>{ temp += data.data().value;})
+                setSum(temp)
+            }else{
+                setSum(prev=>0)
+            }
+        })
     },[])
 
     const table_price= async (table_value)=>{
         const table_result = {
-            value: table_value
+            value: table_value,
+            date: dateTime,
+            // value: table_value
         }
         try {
-            const target = await postPayment(table_result)
-            refetch()
-            // const docRef = await addDoc(collection(dbService, "payment"), table_result)
+            // const target = await postPayment(table_result)
+            // refetch()
+            const docRef = await addDoc(collection(dbService, "payment"), table_result)
         } catch (e) {
             console.log(e)
         }

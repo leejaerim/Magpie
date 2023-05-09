@@ -20,37 +20,33 @@ const TableCard = ({index, menu_name, menu_price, sum, sub, count, countPlus, co
             overflow='hidden'
             variant='outline'
         >
-            <HStack>
-                {attachurl ? (
-                    <Image
-                        objectFit='cover'
-                        maxW={{base: '30%', sm: '200px'}}
-                        src={attachurl}
-                        alt={menu_name}
-                    />
-                ) : (<Image
-                    objectFit='cover'
-                    maxW={{base: '30%', sm: '200px'}}
-                    src='/defaultBox.png'
-                    alt={menu_name}
-                />)}
+                {/*{attachurl ? (*/}
+                {/*    <Image*/}
+                {/*        objectFit='cover'*/}
+                {/*        maxW={{base: '30%', sm: '200px'}}*/}
+                {/*        src={attachurl}*/}
+                {/*        alt={menu_name}*/}
+                {/*    />*/}
+                {/*) : (<Image*/}
+                {/*    objectFit='cover'*/}
+                {/*    maxW={{base: '30%', sm: '200px'}}*/}
+                {/*    src='/defaultBox.png'*/}
+                {/*    alt={menu_name}*/}
+                {/*/>)}*/}
                 <VStack>
-                    <CardBody>
+                    <HStack>
                         <Heading size='md'>{menu_name}</Heading>
                         <Text py='2'>
                             단가 : {menu_price} 원
                         </Text>
-                    </CardBody>
-                    <CardFooter>
+                    </HStack>
                         <HStack>
                             <Input w={'50%'} value={menu_price * count}/>
                             <Button color={'black'}>{count}</Button>
                             <Button colorScheme='red' onClick={UpCount}>+</Button>
                             <Button colorScheme='blue' onClick={DownCount}>-</Button>
                         </HStack>
-                    </CardFooter>
                 </VStack>
-            </HStack>
         </Card>
     )
 }
