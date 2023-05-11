@@ -34,7 +34,7 @@ const TableCard = ({index, menu_name, menu_price, sum, sub, count, countPlus, co
                 {/*    alt={menu_name}*/}
                 {/*/>)}*/}
                 <VStack>
-                    <HStack>
+                    <HStack mb={"-10px;"}>
                         <Heading size='md'>{menu_name}</Heading>
                         <Text py='2'>
                             단가 : {menu_price} 원

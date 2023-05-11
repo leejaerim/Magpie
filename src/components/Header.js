@@ -30,6 +30,7 @@ export default function Header({table_sum}) {
                     sm: 3,
                     md: 0,
                 }}
+                height={"250px;"}
             >
                 <VStack fontSize={30} fontWeight={'bold'}>
                     <HStack>
@@ -51,7 +52,9 @@ export default function Header({table_sum}) {
                         }}>
                             <Button colorScheme={'twitter'}>{paymentPage?'테이블':'결제'}</Button>
                         </Link>
-                        <Button colorScheme={'twitter'} onClick={onLogoutClick}>로그아웃</Button>
+                        <Link onClick={onLogoutClick}>
+                            <Button colorScheme={'twitter'}>로그아웃</Button>
+                        </Link>
                     </HStack>
                 </VStack>
 
