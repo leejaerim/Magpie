@@ -15,7 +15,7 @@ function App() {
     let dateTime = new Date();
     dateTime.setHours(dateTime.getHours() + 9);
     dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
-    const { isLoading, data:dataMap ,refetch} = useQuery([`payment`,dateTime.split(' ')[0]], getPayment);
+    // const { isLoading, data:dataMap ,refetch} = useQuery([`payment`,dateTime.split(' ')[0]], getPayment);
     useEffect(() => {
         AuthService.onAuthStateChanged((user) => {
             if (user) {

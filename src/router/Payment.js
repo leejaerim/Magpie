@@ -14,15 +14,17 @@ import {
 import {useEffect, useRef, useState} from "react";
 import UpdateAlertDialog from "../components/AlertDialog";
 import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
-import {useQuery} from "@tanstack/react-query";
-import {getPayment} from "../api/api_payment.js";
-import { deleteDoc, collection, doc, onSnapshot, query, updateDoc, where} from "firebase/firestore";
+import {getDocs, deleteDoc, collection, doc, onSnapshot, query, updateDoc, where, orderBy, limit, startAfter} from "firebase/firestore";
 import {dbService} from "../fbase";
+import Pagination from "../components/Pagination";
 
 
 const Payment =()=>{
     const [dataMap, setDataMap] = useState([])
+    const [totalDataMap, setTotalDataMap] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
     const [paymentRef, setPaymentRef] = useState(null)
+    const [sumPrice, setSumPrice] = useState(0);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = useRef()
     // const [dataMap, setDataMap] = useState([])
@@ -31,7 +33,8 @@ const Payment =()=>{
     dateTime.setHours(dateTime.getHours() + 9);
     dateTime = dateTime.toISOString().replace('T', ' ').substring(0, 19);
     const [date, setDate] = useState(dateTime.split(' ')[0])
-    const { isLoading, data:dataMap_ ,refetch} = useQuery([`payment`,date], getPayment);
+    const documentsPerPage = 5;
+    // const { isLoading, data:dataMap_ ,refetch} = useQuery([`payment`,date], getPayment);
     const onDeleteClick = async (e) => {
         const confirm_ok = window.confirm("delete this?");
         if (confirm_ok) {
@@ -50,23 +53,34 @@ const Payment =()=>{
         } = e;
         setValue(prev => value)
     }
-    let sumPrice = 0;
+    const countDocuments = async () => {
+        const q = query(
+            collection(dbService, 'payment'),
+            where('date', '>=', date + ' 00:00:00'),
+            where('date', '<=', date + ' 23:59:59'),
+            orderBy("date")
+        );
+        const snapshot = await getDocs(q);
+        setTotalDataMap(prev=>snapshot.docs);
+        snapshot.docs.map(i=>(setSumPrice(prev=>prev+=i.data().value)));
+        setDataMap(snapshot.docs.slice((currentPage-1)*documentsPerPage,currentPage*documentsPerPage))
+    };
+    const getDocuents = async (index) =>{
+        setCurrentPage(prev=>index)
+    }
+
     useEffect(() => {
         if(date != null){
-            // refetch()
-            onSnapshot(query(collection(dbService, "payment"),where("date", ">=", date+" 00:00:00"), where("date", "<=", date+" 23:59:59")), async obj => {
-                if(obj.docs.length != 0){
-                    setDataMap(prev => obj.docs)
-                }else{
-                    setDataMap([])
-                }
-            })
+            countDocuments();
+            setSumPrice(0)
         }
-
     },[date,])
+    useEffect(()=>{
+        setDataMap(totalDataMap.slice((currentPage-1)*documentsPerPage,currentPage*documentsPerPage))
+    },[currentPage])
     return(
         <Box>
-            <input value={date} style={{paddingLeft : '100px;'}} type="date" onChange={(e)=>{
+            <input value={date} type="date" onChange={(e)=>{
                 const {
                     target: { value },
                 } = e;
@@ -101,17 +115,16 @@ const Payment =()=>{
                             {/*{!isLoading && dataMap?.row.length != 0  && Object.keys(dataMap?.row[0]).map(key=> (*/}
                             {/*        (key!='payment_id') &&<Td>{key}</Td>*/}
                             {/*))}*/}
-                            {dataMap.length != 0 && Object.keys(dataMap[0].data()).map(datamap=> (
-                                <Td>{datamap}</Td>
+                            {dataMap.length != 0 && Object.keys(dataMap[0].data()).map(datamap=>(
+                                <Td key={datamap}>{datamap}</Td>
                             ))}
                         </Tr>
                     </Thead>
                         {/*{!isLoading && dataMap?.row.length != 0 && dataMap?.row.map(datamap=>{*/}
                         {/*    sumPrice += datamap.value*/}
                         {dataMap.length != 0 && dataMap.map(datamap=>{
-                            sumPrice += datamap.data().value
                             return(
-                                <Tbody>
+                                <Tbody key={datamap.id}>
                                 <Tr onClick={(e)=>{
                                         setPaymentRef(prev=>doc(dbService, "payment", e.target.dataset.id));
                                         setValue(datamap.data().value)
@@ -128,12 +141,13 @@ const Payment =()=>{
                         })}
                     <Tfoot>
                         <Tr>
-                            <Th>합계</Th>
+                            <Th>총 합계</Th>
                             <Th>{sumPrice}</Th>
                         </Tr>
                     </Tfoot>
                 </Table>
             </TableContainer>
+            {totalDataMap.length != 0 && <Pagination total = {totalDataMap.length} limit = {documentsPerPage} change_page={getDocuents} page = {currentPage}></Pagination>}
             <UpdateAlertDialog isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} value={value}
                                onChange={onChange} onSubmit={onSubmit} onDeleteClick={onDeleteClick}/>
         </Box>
