@@ -56,7 +56,28 @@ const Table = ({index, setIndex, table_index, table_price}) => {
     }
 
     const payment = async () => {
-        table_price(totalPrice)
+        let order = {}
+        let totalPriceObj = {value : totalPrice}
+        Object.keys(count).forEach(i=>{
+            if(count[i] != 0){
+                order[menus[i].seq] = {
+                    count : count[i],
+                    price : menus[i].menuPrice * count[i],
+                    menu : menus[i].id,
+                    seq : menus[i].seq
+                }
+            }
+        })
+        if(Object.keys(order).length == 0){
+            return //Shield pattern
+        }
+        try {
+            const docRef = await addDoc(collection(dbService, "order"), order)
+            totalPriceObj['order_id'] = docRef.id
+        } catch (e) {
+            console.log(e)
+        }
+        table_price(totalPriceObj)
         setTotalPrice(0)
         setCount(prev => [...Array(prev.length).keys()].map(i => 0))
         if (ref != null) {

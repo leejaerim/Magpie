@@ -5,7 +5,6 @@ import {FaStepBackward, FaStepForward} from "react-icons/fa";
 const Pagination =({total = 0, limit = 20, change_page, page = 1})=>{
     const theme = useTheme();
     var range = [...Array(parseInt(Math.ceil(total/limit)))].map((v,i) => i+1);
-    debugger;
     const _onClick =({target})=>{
         change_page(parseInt(target.textContent))
     }

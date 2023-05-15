@@ -63,7 +63,7 @@ const Payment =()=>{
         const snapshot = await getDocs(q);
         setTotalDataMap(prev=>snapshot.docs);
         snapshot.docs.map(i=>(setSumPrice(prev=>prev+=i.data().value)));
-        setDataMap(snapshot.docs.slice((currentPage-1)*documentsPerPage,currentPage*documentsPerPage))
+        setDataMap(snapshot.docs.slice(0,documentsPerPage))
     };
     const getDocuents = async (index) =>{
         setCurrentPage(prev=>index)
@@ -73,6 +73,7 @@ const Payment =()=>{
         if(date != null){
             countDocuments();
             setSumPrice(0)
+            setCurrentPage(1)
         }
     },[date,])
     useEffect(()=>{

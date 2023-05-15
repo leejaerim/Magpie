@@ -45,21 +45,13 @@ function App() {
 
     const table_price= async (table_value)=>{
         const table_result = {
-            value: table_value,
-            date: dateTime,
-            // value: table_value
+            date: dateTime,...table_value
         }
         try {
-            // const target = await postPayment(table_result)
-            // refetch()
             const docRef = await addDoc(collection(dbService, "payment"), table_result)
         } catch (e) {
             console.log(e)
         }
-        // if(ref != null){
-        //     updateDoc(ref, { value: sum+table_value});
-        // }
-        // setSum(prev => prev+table_value);
     }
   return (
     <div className="App">
