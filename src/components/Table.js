@@ -71,12 +71,7 @@ const Table = ({index, setIndex, table_index, table_price}) => {
         if(Object.keys(order).length == 0){
             return //Shield pattern
         }
-        try {
-            const docRef = await addDoc(collection(dbService, "order"), order)
-            totalPriceObj['order_id'] = docRef.id
-        } catch (e) {
-            console.log(e)
-        }
+        totalPriceObj['order'] = order
         table_price(totalPriceObj)
         setTotalPrice(0)
         setCount(prev => [...Array(prev.length).keys()].map(i => 0))
