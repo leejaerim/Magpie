@@ -62,8 +62,8 @@ const Table = ({index, setIndex, table_index, table_price}) => {
             if(count[i] != 0){
                 order[menus[i].seq] = {
                     count : count[i],
-                    price : menus[i].menuPrice * count[i],
-                    menu : menus[i].id,
+                    price : menus[i].menuPrice,
+                    menu : menus[i].menuName,
                     seq : menus[i].seq
                 }
             }
