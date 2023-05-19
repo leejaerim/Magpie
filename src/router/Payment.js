@@ -134,6 +134,9 @@ const Payment =()=>{
                                 }}>
                                     <Td data-id={datamap.id}>{datamap.data().date}</Td>
                                     <Td data-id={datamap.id}>{datamap.data().value}</Td>
+                                    {Object.keys(datamap.data().order).map(i =>
+                                        (<div>{datamap.data().order[i].menu} : {datamap.data().order[i].count}</div>)
+                                    )}
                                     {/*<Td data-id={datamap.payment_id}>{datamap.reg_date}</Td>*/}
                                     {/*<Td data-id={datamap.payment_id}>{datamap.value}</Td>*/}
                                 </Tr>
