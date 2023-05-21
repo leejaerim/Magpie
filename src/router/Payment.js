@@ -80,13 +80,17 @@ const Payment = () => {
     const orderObject = {}
     if (totalDataMap.length != 0) {
         const orderList = totalDataMap.map(i => i.data().order)
-        orderList.forEach(i => Object.keys(i).map(j => {
-            if (orderObject[i[j].menu]) {
-                orderObject[i[j].menu]['cnt'] += i[j].count
-            } else {
-                orderObject[i[j].menu] = {'cnt': i[j].count, 'price': i[j].price}
+        orderList.forEach(i => {
+            if(i){
+                Object.keys(i).map(j => {
+                    if (orderObject[i[j].menu]) {
+                        orderObject[i[j].menu]['cnt'] += i[j].count
+                    } else {
+                        orderObject[i[j].menu] = {'cnt': i[j].count, 'price': i[j].price}
+                    }
+                })
             }
-        }))
+        })
     }
     useEffect(() => {
         if (date != null) {
@@ -152,7 +156,7 @@ const Payment = () => {
                                     <Td data-id={datamap.id}>{datamap.data().date}</Td>
                                     <Td data-id={datamap.id}>{datamap.data().value}</Td>
                                     <Td>
-                                        {Object.keys(datamap.data().order).map(i => {
+                                        {datamap.data().order && Object.keys(datamap.data().order).map(i => {
                                             return (<div
                                                 data-id={datamap.id}>{datamap.data().order[i].menu} : {datamap.data().order[i].count}</div>)
                                         })}
