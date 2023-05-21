@@ -14,18 +14,27 @@ import {
 import {useEffect, useRef, useState} from "react";
 import UpdateAlertDialog from "../components/AlertDialog";
 import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
-import {getDocs, deleteDoc, collection, doc, onSnapshot, query, updateDoc, where, orderBy, limit, startAfter} from "firebase/firestore";
+import {
+    getDocs,
+    deleteDoc,
+    collection,
+    doc,
+    query,
+    updateDoc,
+    where,
+    orderBy
+} from "firebase/firestore";
 import {dbService} from "../fbase";
 import Pagination from "../components/Pagination";
 
 
-const Payment =()=>{
+const Payment = () => {
     const [dataMap, setDataMap] = useState([])
     const [totalDataMap, setTotalDataMap] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [paymentRef, setPaymentRef] = useState(null)
     const [sumPrice, setSumPrice] = useState(0);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const cancelRef = useRef()
     // const [dataMap, setDataMap] = useState([])
     const [value, setValue] = useState(0)
@@ -44,12 +53,12 @@ const Payment =()=>{
     }
     const onSubmit = async (e) => {
         e.preventDefault();
-        await updateDoc(paymentRef, { value: parseInt(value)});
+        await updateDoc(paymentRef, {value: parseInt(value)});
         onClose()
     }
     const onChange = (e) => {
         const {
-            target: { value },
+            target: {value},
         } = e;
         setValue(prev => value)
     }
@@ -61,52 +70,62 @@ const Payment =()=>{
             orderBy("date")
         );
         const snapshot = await getDocs(q);
-        setTotalDataMap(prev=>snapshot.docs);
-        snapshot.docs.map(i=>(setSumPrice(prev=>prev+=i.data().value)));
-        setDataMap(snapshot.docs.slice(0,documentsPerPage))
+        setTotalDataMap(prev => snapshot.docs);
+        snapshot.docs.map(i => (setSumPrice(prev => prev += i.data().value)));
+        setDataMap(snapshot.docs.slice(0, documentsPerPage))
     };
-    const getDocuents = async (index) =>{
-        setCurrentPage(prev=>index)
+    const getDocuents = async (index) => {
+        setCurrentPage(prev => index)
     }
-
+    const orderObject = {}
+    if (totalDataMap.length != 0) {
+        const orderList = totalDataMap.map(i => i.data().order)
+        orderList.forEach(i => Object.keys(i).map(j => {
+            if (orderObject[i[j].menu]) {
+                orderObject[i[j].menu]['cnt'] += i[j].count
+            } else {
+                orderObject[i[j].menu] = {'cnt': i[j].count, 'price': i[j].price}
+            }
+        }))
+    }
     useEffect(() => {
-        if(date != null){
+        if (date != null) {
             countDocuments();
             setSumPrice(0)
             setCurrentPage(1)
         }
-    },[date,])
-    useEffect(()=>{
-        setDataMap(totalDataMap.slice((currentPage-1)*documentsPerPage,currentPage*documentsPerPage))
-    },[currentPage])
-    return(
+    }, [date,])
+    useEffect(() => {
+        setDataMap(totalDataMap.slice((currentPage - 1) * documentsPerPage, currentPage * documentsPerPage))
+    }, [currentPage])
+    return (
         <Box>
-            <input value={date} type="date" onChange={(e)=>{
+            <input value={date} type="date" onChange={(e) => {
                 const {
-                    target: { value },
+                    target: {value},
                 } = e;
                 setDate(prev => value)
             }}/>
-            <Button  onClick={(e)=>{
+            <Button onClick={(e) => {
                 e.preventDefault();
-                setDate(prev=>{
+                setDate(prev => {
                     let temp_date = new Date(prev)
                     temp_date.setDate(temp_date.getDate() - 1);
                     return temp_date.toISOString().substring(0, 10);
                 });
             }} colorScheme={"twitter"} ml={"2"}><FaArrowLeft id={"Left"} color={"#fff"}></FaArrowLeft></Button>
-            <Button colorScheme={"twitter"} ml={"2"} onClick={(e)=>{
+            <Button colorScheme={"twitter"} ml={"2"} onClick={(e) => {
                 e.preventDefault();
                 setDate(dateTime.split(' ')[0]);
             }}>Today</Button>
-            <Button  onClick={(e)=>{
+            <Button onClick={(e) => {
                 e.preventDefault();
-                setDate(prev=>{
+                setDate(prev => {
                     let temp_date = new Date(prev)
                     temp_date.setDate(temp_date.getDate() + 1);
                     return temp_date.toISOString().substring(0, 10);
                 });
-            }}colorScheme={"twitter"} ml={"2"}><FaArrowRight id={"Right"} color={"#fff"}></FaArrowRight></Button>
+            }} colorScheme={"twitter"} ml={"2"}><FaArrowRight id={"Right"} color={"#fff"}></FaArrowRight></Button>
 
             <TableContainer>
                 <Table variant='simple'>
@@ -116,34 +135,45 @@ const Payment =()=>{
                             {/*{!isLoading && dataMap?.row.length != 0  && Object.keys(dataMap?.row[0]).map(key=> (*/}
                             {/*        (key!='payment_id') &&<Td>{key}</Td>*/}
                             {/*))}*/}
-                            {dataMap.length != 0 && Object.keys(dataMap[0].data()).map(datamap=>(
+                            {dataMap.length != 0 && Object.keys(dataMap[0].data()).map(datamap => (
                                 <Td key={datamap}>{datamap}</Td>
                             ))}
                         </Tr>
                     </Thead>
-                        {/*{!isLoading && dataMap?.row.length != 0 && dataMap?.row.map(datamap=>{*/}
-                        {/*    sumPrice += datamap.value*/}
-                        {dataMap.length != 0 && dataMap.map(datamap=>{
-                            return(
-                                <Tbody key={datamap.id}>
-                                <Tr onClick={(e)=>{
-                                        setPaymentRef(prev=>doc(dbService, "payment", e.target.dataset.id));
-                                        setValue(datamap.data().value)
-                                        // setValue(datamap.value)
-                                        onOpen();
+                    <Tbody>
+                        {dataMap.length != 0 && dataMap.map(datamap => {
+                            return (
+                                <Tr onClick={(e) => {
+                                    setPaymentRef(prev => doc(dbService, "payment", e.target.dataset.id));
+                                    setValue(datamap.data().value)
+                                    // setValue(datamap.value)
+                                    onOpen();
                                 }}>
                                     <Td data-id={datamap.id}>{datamap.data().date}</Td>
                                     <Td data-id={datamap.id}>{datamap.data().value}</Td>
-                                    {Object.keys(datamap.data().order).map(i =>
-                                        (<div>{datamap.data().order[i].menu} : {datamap.data().order[i].count}</div>)
-                                    )}
-                                    {/*<Td data-id={datamap.payment_id}>{datamap.reg_date}</Td>*/}
-                                    {/*<Td data-id={datamap.payment_id}>{datamap.value}</Td>*/}
+                                    <Td>
+                                        {Object.keys(datamap.data().order).map(i => {
+                                            return (<div
+                                                data-id={datamap.id}>{datamap.data().order[i].menu} : {datamap.data().order[i].count}</div>)
+                                        })}
+                                    </Td>
                                 </Tr>
-                            </Tbody>
                             )
                         })}
+                    </Tbody>
                     <Tfoot>
+                        <Tr>
+                            <Th>메뉴</Th>
+                            <Th>수량</Th>
+                            <Th>정산</Th>
+                        </Tr>
+                        {totalDataMap.length != 0 && Object.keys(orderObject).map(i => (
+                            <Tr>
+                                <Th>{i}</Th>
+                                <Th>{orderObject[i]['cnt']}</Th>
+                                <Th>{orderObject[i]['price'] * orderObject[i]['cnt']}</Th>
+                            </Tr>
+                        ))}
                         <Tr>
                             <Th>총 합계</Th>
                             <Th>{sumPrice}</Th>
@@ -151,11 +181,12 @@ const Payment =()=>{
                     </Tfoot>
                 </Table>
             </TableContainer>
-            {totalDataMap.length != 0 && <Pagination total = {totalDataMap.length} limit = {documentsPerPage} change_page={getDocuents} page = {currentPage}></Pagination>}
+            {totalDataMap.length != 0 && <Pagination total={totalDataMap.length} limit={documentsPerPage}
+                                                     change_page={getDocuents} page={currentPage}></Pagination>}
             <UpdateAlertDialog isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} value={value}
                                onChange={onChange} onSubmit={onSubmit} onDeleteClick={onDeleteClick}/>
         </Box>
     )
 
 }
-export default Payment
+    export default Payment
