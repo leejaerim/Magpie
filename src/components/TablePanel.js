@@ -8,6 +8,7 @@ import './table.css'
 
 const TablePanel = _ => {
     const [table_price] = useOutletContext();
+    const [eachOfTablePrice,setEachOfTablePrice] = useState([]);
     const [tableCount, setTableCount] = useState(0);
     const [index, setIndex] = useState(-1);
     useEffect(() => {
@@ -18,8 +19,15 @@ const TablePanel = _ => {
             limit(1)
         ), obj => {
             setTableCount(obj.docs[0].data().number_of_table);
+            setEachOfTablePrice(new Array(obj.docs[0].data().number_of_table).fill(0))
         })
     }, [])
+    const setTablePrice = (idx, table_price)=>{
+        setEachOfTablePrice(prev=>{
+            prev[idx] = table_price;
+            return prev
+        })
+    }
     const setIndex0 = _ => {
         setIndex(prev => -1);
     }
@@ -43,13 +51,16 @@ const TablePanel = _ => {
                                 }}
                             >
                                 {i + 1}
+                                <br/>
+                                {eachOfTablePrice.length != 0 && eachOfTablePrice[i]}
+
                             </Button>
                         ))}
                     </Grid>
                 </Box>
             </Box>
             {[...Array(tableCount).keys()].map((i) => (
-                <Table index={index} setIndex={setIndex0} table_index={i} table_price={table_price}></Table>
+                <Table index={index} setIndex={setIndex0} table_index={i} table_price={table_price} setTablePrice={setTablePrice}></Table>
             ))}
 
         </Box>

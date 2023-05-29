@@ -5,7 +5,7 @@ import {collection, onSnapshot, query, doc, where, addDoc, updateDoc, orderBy} f
 import {dbService} from "../fbase";
 import MenuList from "./MenuList";
 
-const Table = ({index, setIndex, table_index, table_price}) => {
+const Table = ({index, setIndex, table_index, table_price,setTablePrice}) => {
     const [menus, setMenus] = useState([]);
     const [count, setCount] = useState([]);
     const [ref, setRef] = useState(null);
@@ -17,10 +17,10 @@ const Table = ({index, setIndex, table_index, table_price}) => {
                 table_sum += menu.menuPrice * count[index]
             })
             setTotalPrice(table_sum)
+            setTablePrice(table_index,table_sum)
         }
     }, [count, menus])
     useEffect(() => {
-        //getNweets();
         onSnapshot(query(collection(dbService, "menu"), orderBy("seq", "asc")), obj => {
             setMenus(obj.docs.map((doc) => ({
                 id: doc.id,

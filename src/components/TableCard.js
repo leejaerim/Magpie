@@ -35,7 +35,7 @@ const TableCard = ({index, menu_name, menu_price, sum, sub, count, countPlus, co
                 {/*/>)}*/}
                 <VStack>
                     <HStack mb={"-10px;"}>
-                        <Heading size='md'>{menu_name}</Heading>
+                        <Heading size='lg'>{menu_name}</Heading>
                         <Text py='2'>
                             단가 : {menu_price} 원
                         </Text>
@@ -43,8 +43,8 @@ const TableCard = ({index, menu_name, menu_price, sum, sub, count, countPlus, co
                         <HStack>
                             <Input w={'50%'} value={menu_price * count}/>
                             <Button color={'black'}>{count}</Button>
-                            <Button colorScheme='red' onClick={UpCount}>+</Button>
-                            <Button colorScheme='blue' onClick={DownCount}>-</Button>
+                            <Button size={'lg'} colorScheme='red' onClick={UpCount}>+</Button>
+                            <Button size={'lg'} colorScheme='blue' onClick={DownCount}>-</Button>
                         </HStack>
                 </VStack>
         </Card>
