@@ -43,8 +43,8 @@ const TableCard = ({index, menu_name, menu_price, sum, sub, count, countPlus, co
                         <HStack>
                             <Input w={'50%'} value={menu_price * count}/>
                             <Button color={'black'}>{count}</Button>
-                            <Button size={'lg'} colorScheme='red' onClick={UpCount}>+</Button>
-                            <Button size={'lg'} colorScheme='blue' onClick={DownCount}>-</Button>
+                            <Button w={'150px;'} size={'lg'} colorScheme='red' onClick={UpCount}>+</Button>
+                            <Button w={'150px;'} size={'lg'} colorScheme='blue' onClick={DownCount}>-</Button>
                         </HStack>
                 </VStack>
         </Card>
